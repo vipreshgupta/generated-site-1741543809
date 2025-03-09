@@ -1,0 +1,467 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Booking Website</title>
+    <style>
+        /* CSS Styles */
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #87CEEB;
+            --accent-color-orange: #FFA500;
+            --accent-color-green: #28A745;
+            --neutral-color-white: #FFFFFF;
+            --neutral-color-light-gray: #F2F2F2;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--neutral-color-white);
+            color: #333;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--neutral-color-white);
+            padding: 10px 0;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-inline: 20px;
+        }
+
+        header img {
+            height: 50px;
+            width: auto;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: var(--neutral-color-white);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+
+        #home {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 500px;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MDcxMzJ8MHwxfHNlYXJjaHwzfHx0cmF2ZWx8ZW58MHx8fHwxNzE3MjU5NjAxfDA&ixlib=rb-4.0.3&q=80&w=1080') no-repeat center center;
+            background-size: cover;
+            color: var(--neutral-color-white);
+            text-align: center;
+        }
+
+        .search-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+        }
+
+        .search-bar input[type="text"],
+        .search-bar input[type="date"],
+        .search-bar button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .search-bar button {
+            background-color: var(--accent-color-orange);
+            color: var(--neutral-color-white);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-bar button:hover {
+            background-color: var(--accent-color-green);
+        }
+
+        #features {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        #features h2 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+
+        .feature-item {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: var(--neutral-color-light-gray);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-item h3 {
+            color: var(--accent-color-green);
+        }
+
+        .feature-item img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: var(--neutral-color-white);
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        footer ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        footer ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        footer ul li a {
+            color: var(--neutral-color-white);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer ul li a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+            }
+
+            nav ul {
+                margin-top: 10px;
+            }
+
+            nav ul li {
+                margin: 5px 10px;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+        }
+        /* Seat Selection Styles */
+        .seat-map {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 5px;
+            margin: 20px auto;
+            max-width: 600px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .seat {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            text-align: center;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            background-color: #fff;
+            transition: background-color 0.3s ease;
+        }
+
+        .seat.available {
+            background-color: #d4edda; /* Light green for available */
+        }
+
+        .seat.available:hover {
+            background-color: #c3e6cb;
+        }
+
+        .seat.booked {
+            background-color: #f8d7da; /* Light red for booked */
+            cursor: not-allowed;
+        }
+
+        .seat.selected {
+            background-color: #cce5ff; /* Light blue for selected */
+        }
+
+        /* Aisle seats */
+        .seat:nth-child(3n) {
+            margin-right: 15px; /* Wider gap for aisle */
+        }
+        /* Fare Calculation Styles */
+        .fare-calculation {
+            margin: 20px auto;
+            max-width: 600px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .fare-calculation h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .fare-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .total-fare {
+            font-weight: bold;
+            color: var(--accent-color-green);
+            margin-top: 10px;
+        }
+        /* Route Styles */
+        .route-list {
+            margin: 20px auto;
+            max-width: 800px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .route-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s ease;
+        }
+
+        .route-item:last-child {
+            border-bottom: none;
+        }
+
+        .route-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .route-details {
+            flex-grow: 1;
+        }
+
+        .route-details h4 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .route-actions button {
+            background-color: var(--accent-color-orange);
+            color: var(--neutral-color-white);
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .route-actions button:hover {
+            background-color: var(--accent-color-green);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <img src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MDcxMzJ8MHwxfHNlYXJjaHwzfHx0cmF2ZWx8ZW58MHx8fHwxNzE3MjU5NjAxfDA&ixlib=rb-4.0.3&q=80&w=1080" alt="Company Logo">
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#book-tickets">Book Tickets</a></li>
+                <li><a href="#routes">Routes</a></li>
+                <li><a href="#support">Support</a></li>
+                <li><a href="#account">Account</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home">
+        <div class="search-bar">
+            <input type="text" placeholder="From">
+            <input type="text" placeholder="To">
+            <input type="date">
+            <button>Search</button>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features">
+        <h2>Our Features</h2>
+        <div class="feature-item">
+            <h3>Seat Selection</h3>
+            <img src="https://images.unsplash.com/photo-1519817681486-8185c5571765?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MDcxMzJ8MHwxfHNlYXJjaHwxfHxzZWF0JTIwbWFwfGVufDB8fHx8MTcxNzI1OTY2N3ww&ixlib=rb-4.0.3&q=80&w=1080" alt="Seat Selection">
+            <p>Select your preferred seat from an interactive map.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Fare Calculation</h3>
+            <img src="https://images.unsplash.com/photo-1596003906148-e78fbd5d5e8b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MDcxMzJ8MHwxfHNlYXJjaHwxfHxjYWxjdWxhdG9yfGVufDB8fHx8MTcxNzI1OTcwMnww&ixlib=rb-4.0.3&q=80&w=1080" alt="Fare Calculation">
+            <p>Get real-time fare updates based on your selections.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Different Routes</h3>
+            <img src="https://images.unsplash.com/photo-1553546867-2d4a99ff79bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MDcxMzJ8MHwxfHNlYXJjaHwxfHxidXN8ZW58MHx8fHwxNzE3MjU5NzM0fDA&ixlib=rb-4.0.3&q=80&w=1080" alt="Routes Map">
+            <p>Choose from a variety of routes to suit your needs.</p>
+        </div>
+    </section>
+<!-- Seat Selection Section -->
+<section id="book-tickets">
+    <h2>Book Tickets</h2>
+    <div class="seat-map">
+    </div>
+    <div class="fare-calculation">
+        <h3>Fare Calculation</h3>
+        <div class="fare-details">
+            <span>Base Fare:</span>
+            <span id="base-fare">$0.00</span>
+        </div>
+        <div class="fare-details">
+            <span>Taxes:</span>
+            <span id="taxes">$0.00</span>
+        </div>
+        <div class="fare-details">
+            <span>Additional Services:</span>
+            <span id="services">$0.00</span>
+        </div>
+        <div class="total-fare">
+            <span>Total Fare:</span>
+            <span id="total-fare">$0.00</span>
+        </div>
+    </div>
+</section>
+
+<!-- Routes Section -->
+<section id="routes">
+    <h2>Available Routes</h2>
+    <div class="route-list">
+        <div class="route-item">
+            <div class="route-details">
+                <h4>Route A: City X to City Y</h4>
+                <p>Stops: A, B, C | Duration: 5h | Frequency: Daily</p>
+            </div>
+            <div class="route-actions">
+                <button>Book Now</button>
+            </div>
+        </div>
+        <div class="route-item">
+            <div class="route-details">
+                <h4>Route B: City Y to City Z</h4>
+                <p>Stops: D, E | Duration: 3h | Frequency: Twice a day</p>
+            </div>
+            <div class="route-actions">
+                <button>Book Now</button>
+            </div>
+        </div>
+    </div>
+</section>
+    <!-- Footer -->
+    <footer>
+        <p>Contact us: email@example.com | Phone: (123) 456-7890</p>
+        <ul class="social-media">
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">Instagram</a></li>
+        </ul>
+        <p>&copy; 2023 Bus Booking Company. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // JavaScript for Interactivity and Animations
+
+        // Seat Selection Logic
+        const seatMap = document.querySelector('.seat-map');
+        const baseFareDisplay = document.getElementById('base-fare');
+        const taxesDisplay = document.getElementById('taxes');
+        const servicesDisplay = document.getElementById('services');
+        const totalFareDisplay = document.getElementById('total-fare');
+
+        let selectedSeats = [];
+        let baseFare = 0;
+        let taxes = 0;
+        let services = 0;
+
+        function createSeats() {
+            for (let i = 1; i <= 60; i++) {
+                const seat = document.createElement('div');
+                seat.classList.add('seat', 'available');
+                seat.textContent = i;
+                seat.addEventListener('click', () => toggleSeat(seat));
+                seatMap.appendChild(seat);
+            }
+        }
+
+        function toggleSeat(seat) {
+            if (seat.classList.contains('available')) {
+                seat.classList.remove('available');
+                seat.classList.add('selected');
+                selectedSeats.push(seat.textContent);
+            } else if (seat.classList.contains('selected')) {
+                seat.classList.remove('selected');
+                seat.classList.add('available');
+                selectedSeats = selectedSeats.filter(s => s !== seat.textContent);
+            }
+            updateFare();
+        }
+
+        function updateFare() {
+            baseFare = selectedSeats.length * 20; // $20 per seat
+            taxes = baseFare * 0.1; // 10% tax
+            services = selectedSeats.length * 5; // $5 service fee per seat
+            let totalFare = baseFare + taxes + services;
+
+            baseFareDisplay.textContent = '$' + baseFare.toFixed(2);
+            taxesDisplay.textContent = '$' + taxes.toFixed(2);
+            servicesDisplay.textContent = '$' + services.toFixed(2);
+            totalFareDisplay.textContent = '$' + totalFare.toFixed(2);
+        }
+
+        createSeats();
+    </script>
+</body>
+</html>
